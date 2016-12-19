@@ -1,0 +1,16 @@
+#!/bin/bash
+
+pushd /etc/ssl
+
+openssl req -newkey rsa:2048 -nodes -keyout private/client.key -out private/client.csr
+openssl x509 -req -days 365000 -in private/client.csr -CA certs/ca.crt -CAkey private/ca.key -set_serial 01 -out client.crt
+openssl pkcs12 -export -nodes -passout pass: -clcerts -in client.crt -inkey private/client.key -out client.p12
+
+rm client.crt private/client.*
+openssl pkcs12 -in client.p12 -out client.pem -clcerts
+printf "Outputting client.pem to STDOUT\n\n\n"
+cat client.pem
+printf "\n\n\n"
+rm client.p12 client.pem
+
+popd
