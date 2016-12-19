@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Test
+NGINX_CONF=testout.conf
+SITES_LIST=sites-list.txt.example
+
+# Production
+#NGINX_CONF=/etc/nginx/conf.d/default.conf
+#SITES_LIST=/sites-list.txt
+
+echo '' > $NGINX_CONF
+while IFS='' read -r line || [[ -n "$line" ]]; do
+    PORT=$(echo $line | cut -f1 -d ' ')
+    PROXY_PASS=$(echo $line | cut -f2 -d ' ')
+    printf "server {\n" >> $NGINX_CONF 
+    printf "    listen ${PORT} ssl;\n" >> $NGINX_CONF
+    printf "    listen [::]:${PORT} ssl ipv6only=on;\n" >> $NGINX_CONF
+    printf "\n" >> $NGINX_CONF
+    printf "    ssl_certificate /etc/ssl/certs/ca.crt;\n" >> $NGINX_CONF
+    printf "    ssl_certificate_key /etc/ssl/private/ca.key;\n" >> $NGINX_CONF
+    printf "    ssl_client_certificate /etc/ssl/certs/ca.crt;\n" >> $NGINX_CONF
+    printf "    ssl_verify_client on;\n" >> $NGINX_CONF
+    printf "\n" >> $NGINX_CONF
+    printf "    location / {\n" >> $NGINX_CONF
+    printf "        proxy_pass ${PROXY_PASS};\n" >> $NGINX_CONF
+    printf "    }\n" >> $NGINX_CONF
+    printf "}\n\n" >> $NGINX_CONF
+done < $SITES_LIST

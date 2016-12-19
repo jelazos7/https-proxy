@@ -1,0 +1,6 @@
+#!/bin/bash
+
+SITES_LIST=/sites-list.txt
+echo "$1" >> $SITES_LIST 
+/sites-update
+
