@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Test
-NGINX_CONF=testout.conf
-SITES_LIST=sites-list.txt.example
+#NGINX_CONF=testout.conf
+#SITES_LIST=sites-list.txt.example
 
 # Production
-#NGINX_CONF=/etc/nginx/conf.d/default.conf
-#SITES_LIST=/sites-list.txt
+NGINX_CONF=/etc/nginx/conf.d/default.conf
+SITES_LIST=/sites-list.txt
 
 echo '' > $NGINX_CONF
 while IFS='' read -r line || [[ -n "$line" ]]; do
